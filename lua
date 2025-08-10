@@ -1,41 +1,38 @@
 loadstring(game:HttpGet("https://obj.wearedevs.net/2/scripts/Infinite%20Yield.lua"))()
 
-local Players = game.Players
-local Player = game.Players.LocalPlayer
-
 local TextChatService = game:GetService("TextChatService")
 local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
 
 local LocalPlayer = Players.LocalPlayer
+local Player = Players.LocalPlayer
+
+local ChatInfo = {
+    AutoReply = {
+        Enabled = false,
+        
+        Phrase1 = "",
+        Phrase2 = "",
+        Phrase3 = "",
+
+        Target = "",
+
+        MessageCount = 0,
+        MessagesSent = 0,
+    },
+}
 
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-	Name = "Striker",
-	Icon = "rocket",
-	LoadingTitle = "Stereo Productions 🗼",
-	LoadingSubtitle = "by @plagzel",
-	Theme = "Default",
+   Name = "always staring at me",
+   Icon = 0,
+   LoadingTitle = "always staring at me",
+   LoadingSubtitle = "by Gabriel",
+   ShowText = "  ",
+   Theme = "Default",
 
-	DisableRayfieldPrompts = false,
-	DisableBuildWarnings = false,
-
-	ConfigurationSaving = {
-		Enabled = true,
-		FolderName = "Striker",
-		FileName = "Striker.txt"
-	},
-
-	KeySystem = false,
-	KeySettings = {
-		Title = "Anti-Breach 🔑",
-		Subtitle = "Key Hardware",
-		Note = "👾 Buy key from @plagzel on discord.",
-		FileName = "StrikerKey.txt",
-		SaveKey = true,
-		GrabKeyFromSite = false,
-		Key = {"jzid1$_1jk$f1$3123m1gbgrfdgn__(@(4-!~@($mYOOLO"}
-	}
+   ToggleUIKeybind = "K",
 })
 
 local ChatTab = Window:CreateTab("Chat", "bot-message-square")
@@ -97,39 +94,6 @@ local Phrase3Input = ChatTab:CreateInput({
    end,
 })
 
-TextChatService.OnIncomingMessage = function(InComingMessage)
-   if InComingMessage.TextSource.Name == ChatInfo.AutoReply.Target then
-      ChatInfo.AutoReply.MessageCount += 1
-
-      if ChatInfo.AutoReply.MessageCount == 1 then
-         print("This nigger sent a message XD!")
-         ChatInfo.AutoReply.MessagesSent += 1
-
-         if ChatInfo.AutoReply.MessagesSent == 1 then
-            TextChatService.TextChannels.RBXGeneral:SendAsync(ChatInfo.AutoReply.Phrase1)
-         elseif ChatInfo.AutoReply.MessagesSent == 2 then
-            TextChatService.TextChannels.RBXGeneral:SendAsync(ChatInfo.AutoReply.Phrase2)
-         elseif ChatInfo.AutoReply.MessagesSent == 3 then
-             ChatInfo.AutoReply.MessagesSent = 0
-             TextChatService.TextChannels.RBXGeneral:SendAsync(ChatInfo.AutoReply.Phrase3)
-         end
-      elseif ChatInfo.AutoReply.MessageCount == 2 then
-          print("This nigger sent a message XD!")
-         ChatInfo.AutoReply.MessagesSent += 1
-
-         if ChatInfo.AutoReply.MessagesSent == 1 then
-            TextChatService.TextChannels.RBXGeneral:SendAsync(ChatInfo.AutoReply.Phrase1)
-         elseif ChatInfo.AutoReply.MessagesSent == 2 then
-            TextChatService.TextChannels.RBXGeneral:SendAsync(ChatInfo.AutoReply.Phrase2)
-         elseif ChatInfo.AutoReply.MessagesSent == 3 then
-             ChatInfo.AutoReply.MessagesSent = 0
-             TextChatService.TextChannels.RBXGeneral:SendAsync(ChatInfo.AutoReply.Phrase3)
-         end
-         ChatInfo.AutoReply.MessageCount = 0
-      end
-   end
-end
-
 local KillTab = Window:CreateTab("Kill Tab", "skull")
 
 local KillVars = {
@@ -166,4 +130,90 @@ local LatchToggle = KillTab:CreateToggle({
 	CurrentValue = false,
 	Flag = "Latch.flag", 
 	Callback = function(Value)
-		if Value ==
+		if Value == true then
+			KillVars.Latch = true
+		elseif Value == false then
+			KillVars.Latch = false
+			Player.Character.Humanoid:UnequipTools()
+		end
+	end,
+})
+
+local LatchLoop = task.defer(function()
+	while true do
+		if KillVars.Latch == true then
+			if Player.Character ~= nil then
+				local Humanoid = Player.Character:FindFirstChildOfClass("Humanoid")
+
+				if Humanoid ~= nil then
+					local TargetPlayer = Players:FindFirstChild(KillVars.TargetPlayer)
+
+					if TargetPlayer ~= nil and TargetPlayer.Character ~= nil then
+						local HumanoidRootPart = TargetPlayer.Character:FindFirstChild("HumanoidRootPart")
+
+						if HumanoidRootPart then
+
+							if Player.Backpack:FindFirstChild("Swuvle") then
+								Player.Character.Humanoid:EquipTool(Player.Backpack.Swuvle)
+							end
+
+							local Swuvle = Player.Character:FindFirstChild("Swuvle")
+
+							if Swuvle ~= nil then
+								local Handle = Swuvle:FindFirstChild("Handle")
+
+								if Handle then
+									Swuvle.Handle.Massless = true
+									Handle.Position = TargetPlayer.Character.HumanoidRootPart.Position
+								elseif not Handle then
+									Player.Character.Humanoid.Health = 0
+								end
+							elseif Swuvle == nil then
+								Player.Character.Humanoid.Health = 0
+							end
+							
+						end
+					end
+				end
+			end
+		else
+
+		end
+
+		task.wait()
+	end
+end)
+
+TextChatService.OnIncomingMessage = function(InComingMessage)
+   if InComingMessage.TextSource.Name == ChatInfo.AutoReply.Target then
+      ChatInfo.AutoReply.MessageCount += 1
+
+      if ChatInfo.AutoReply.MessageCount == 1 then
+         print("This nigger sent a message XD!")
+         ChatInfo.AutoReply.MessagesSent += 1
+
+         if ChatInfo.AutoReply.MessagesSent == 1 then
+            TextChatService.TextChannels.RBXGeneral:SendAsync(ChatInfo.AutoReply.Phrase1)
+         elseif ChatInfo.AutoReply.MessagesSent == 2 then
+            TextChatService.TextChannels.RBXGeneral:SendAsync(ChatInfo.AutoReply.Phrase2)
+         elseif ChatInfo.AutoReply.MessagesSent == 3 then
+             ChatInfo.AutoReply.MessagesSent = 0
+             TextChatService.TextChannels.RBXGeneral:SendAsync(ChatInfo.AutoReply.Phrase3)
+         end
+      elseif ChatInfo.AutoReply.MessageCount == 2 then
+          print("This nigger sent a message XD!")
+         ChatInfo.AutoReply.MessagesSent += 1
+
+         if ChatInfo.AutoReply.MessagesSent == 1 then
+            TextChatService.TextChannels.RBXGeneral:SendAsync(ChatInfo.AutoReply.Phrase1)
+         elseif ChatInfo.AutoReply.MessagesSent == 2 then
+            TextChatService.TextChannels.RBXGeneral:SendAsync(ChatInfo.AutoReply.Phrase2)
+         elseif ChatInfo.AutoReply.MessagesSent == 3 then
+             ChatInfo.AutoReply.MessagesSent = 0
+             TextChatService.TextChannels.RBXGeneral:SendAsync(ChatInfo.AutoReply.Phrase3)
+         end
+         ChatInfo.AutoReply.MessageCount = 0
+      end
+   end
+end
+
