@@ -1,5 +1,3 @@
-loadstring(game:HttpGet("https://obj.wearedevs.net/2/scripts/Infinite%20Yield.lua"))()
-
 local TextChatService = game:GetService("TextChatService")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
